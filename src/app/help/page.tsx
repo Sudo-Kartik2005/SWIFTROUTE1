@@ -40,7 +40,7 @@ export default function HelpPage() {
           fill
           style={{ objectFit: 'cover' }}
           className="absolute inset-0 z-0 opacity-10"
-          data-ai-hint="geometric pattern"
+          data-ai-hint="support center"
           sizes="100vw"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-0" />

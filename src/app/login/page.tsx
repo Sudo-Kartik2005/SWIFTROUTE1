@@ -61,7 +61,7 @@ export default function LoginPage() {
                 fill
                 style={{ objectFit: 'cover' }}
                 className="absolute inset-0 z-0 opacity-20"
-                data-ai-hint="abstract background"
+                data-ai-hint="city street"
                 sizes="100vw"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background z-0" />

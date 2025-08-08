@@ -1,3 +1,4 @@
+
 import { RideRequestForm } from '@/components/ride-request-form';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,21 +28,21 @@ const testimonials = [
         name: "Sarah J.",
         role: "Frequent Traveler",
         avatar: "https://placehold.co/100x100.png",
-        dataAiHint: "woman portrait",
+        dataAiHint: "woman smiling",
         comment: "SwiftRoute has been a lifesaver for my business trips. Always reliable and professional."
     },
     {
         name: "Mike D.",
         role: "City Commuter",
         avatar: "https://placehold.co/100x100.png",
-        dataAiHint: "man portrait",
+        dataAiHint: "man professional",
         comment: "The easiest way to get around town. The app is intuitive and the drivers are great."
     },
     {
         name: "Priya K.",
         role: "Student",
         avatar: "https://placehold.co/100x100.png",
-        dataAiHint: "person portrait",
+        dataAiHint: "woman happy",
         comment: "Affordable and convenient. I use SwiftRoute to get to my campus every day."
     }
 ]
@@ -57,7 +58,7 @@ export default function Home() {
           fill
           style={{ objectFit: 'cover' }}
           className="absolute inset-0 z-0"
-          data-ai-hint="city night"
+          data-ai-hint="city traffic"
           sizes="100vw"
           priority
         />

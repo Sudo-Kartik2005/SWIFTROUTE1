@@ -3,7 +3,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowRight, Calendar, DollarSign, Loader2, MapPin, PackageOpen, Car } from "lucide-react";
+import { Calendar, DollarSign, Loader2, MapPin, PackageOpen, Car } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
@@ -49,7 +49,7 @@ export default function ProfilePage() {
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="flex flex-col md:flex-row items-center gap-6 mb-12">
           <Avatar className="h-24 w-24 border-4 border-background shadow-lg">
-            <AvatarImage src="https://placehold.co/100x100.png" alt="User avatar" data-ai-hint="profile portrait" />
+            <AvatarImage src="https://placehold.co/100x100.png" alt="User avatar" data-ai-hint="person smiling" />
             <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
           </Avatar>
           <div>

@@ -4,7 +4,7 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { CheckCircle, MapPin, DollarSign, Car } from 'lucide-react';
+import { CheckCircle, MapPin, DollarSign, Car, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -83,7 +83,7 @@ function ConfirmationContent() {
               alt="Map placeholder"
               fill
               style={{ objectFit: 'cover' }}
-              data-ai-hint="street map"
+              data-ai-hint="route map"
               sizes="(max-width: 768px) 100vw, 500px"
             />
           </div>
@@ -106,23 +106,4 @@ export default function ConfirmationPage() {
             <ConfirmationContent />
         </Suspense>
     )
-}
-
-function Loader2(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-    </svg>
-  )
 }
