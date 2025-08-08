@@ -1,0 +1,120 @@
+'use client';
+
+import { useFormState, useFormStatus } from 'react-dom';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { MapPin, DollarSign, ArrowRight, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
+import { handleEstimateFare, type FareEstimateState } from '@/app/actions';
+import { useToast } from '@/hooks/use-toast';
+
+const initialState: FareEstimateState = {
+  success: false,
+};
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={pending}>
+      {pending ? <Loader2 className="animate-spin" /> : 'Get Fare Estimate'}
+    </Button>
+  );
+}
+
+export function RideRequestForm() {
+  const [state, formAction] = useFormState(handleEstimateFare, initialState);
+  const { toast } = useToast();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!state.success && state.error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: state.error,
+      });
+    }
+  }, [state, toast]);
+  
+  const handleConfirmRide = () => {
+    if (state.success && state.pickupLocation && state.dropoffLocation && state.estimatedFare) {
+        const params = new URLSearchParams({
+        pickup: state.pickupLocation,
+        dropoff: state.dropoffLocation,
+        fare: state.estimatedFare.toString(),
+        });
+        router.push(`/confirmation?${params.toString()}`);
+    }
+  }
+
+  return (
+    <div className="w-full max-w-md mx-auto">
+      <Card className="shadow-2xl bg-card/90 backdrop-blur-sm">
+        <CardHeader>
+          <CardTitle className="text-2xl">Where to?</CardTitle>
+          <CardDescription>Enter your pickup and drop-off locations.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form action={formAction} className="space-y-4">
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                name="pickupLocation"
+                placeholder="Enter pick-up location"
+                className="pl-10"
+                required
+              />
+            </div>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                name="dropoffLocation"
+                placeholder="Enter drop-off location"
+                className="pl-10"
+                required
+              />
+            </div>
+            <SubmitButton />
+          </form>
+        </CardContent>
+      </Card>
+
+      {state.success && state.estimatedFare !== undefined && (
+        <Card className="mt-8 shadow-2xl animate-in fade-in-50">
+          <CardHeader>
+            <CardTitle>Fare Estimate</CardTitle>
+            <CardDescription>Review your trip details and confirm.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex flex-col space-y-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-green-500" />
+                    <span className='font-medium text-foreground'>From:</span>
+                    <span>{state.pickupLocation}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-red-500" />
+                    <span className='font-medium text-foreground'>To:</span>
+                    <span>{state.dropoffLocation}</span>
+                </div>
+            </div>
+            <div className="flex items-center justify-center text-4xl font-bold py-4">
+              <DollarSign className="h-8 w-8 mr-2 text-accent" />
+              <span>{state.estimatedFare.toFixed(2)}</span>
+            </div>
+            <p className="text-xs text-center text-muted-foreground">
+                This is an estimate and may vary based on traffic and other factors.
+            </p>
+          </CardContent>
+          <CardFooter>
+            <Button className="w-full" onClick={handleConfirmRide}>
+              Confirm Ride
+            </Button>
+          </CardFooter>
+        </Card>
+      )}
+    </div>
+  );
+}
