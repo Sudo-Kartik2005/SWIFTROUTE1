@@ -5,10 +5,20 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Car, LogIn } from "lucide-react";
+import { LogIn } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+    const router = useRouter();
+
+    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        // In a real application, you would handle authentication logic here.
+        // For this prototype, we'll just redirect to the profile page.
+        router.push('/profile');
+    };
+
     return (
         <div className="flex-1 flex items-center justify-center p-4 bg-background">
             <Card className="w-full max-w-sm shadow-2xl animate-in fade-in-50">
@@ -18,7 +28,7 @@ export default function LoginPage() {
                     <CardDescription>Enter your credentials to access your account.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form className="space-y-4">
+                    <form className="space-y-4" onSubmit={handleLogin}>
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
                             <Input id="email" type="email" placeholder="m@example.com" required />
