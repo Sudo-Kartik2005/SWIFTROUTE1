@@ -35,7 +35,7 @@ export default function HelpPage() {
   return (
     <div className="flex-1 w-full relative">
       <Image
-          src="https://placehold.co/1920x1080.png"
+          src="https://images.unsplash.com/photo-1560439514-4e280ea5a853?q=80&w=1920&h=1080&auto=format&fit=crop"
           alt="Support background"
           fill
           style={{ objectFit: 'cover' }}

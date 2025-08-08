@@ -65,7 +65,7 @@ export default function RegisterPage() {
     return (
         <div className="flex-1 flex items-center justify-center p-4 relative">
             <Image
-                src="https://placehold.co/1920x1080.png"
+                src="https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=1920&h=1080&auto=format&fit=crop"
                 alt="City background"
                 fill
                 style={{ objectFit: 'cover' }}

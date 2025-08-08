@@ -27,21 +27,21 @@ const testimonials = [
     {
         name: "Sarah J.",
         role: "Frequent Traveler",
-        avatar: "https://placehold.co/100x100.png",
+        avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=100&h=100&auto=format&fit=crop",
         dataAiHint: "woman smiling",
         comment: "SwiftRoute has been a lifesaver for my business trips. Always reliable and professional."
     },
     {
         name: "Mike D.",
         role: "City Commuter",
-        avatar: "https://placehold.co/100x100.png",
+        avatar: "https://images.unsplash.com/photo-1566753323558-f4e0952af115?q=80&w=100&h=100&auto=format&fit=crop",
         dataAiHint: "man professional",
         comment: "The easiest way to get around town. The app is intuitive and the drivers are great."
     },
     {
         name: "Priya K.",
         role: "Student",
-        avatar: "https://placehold.co/100x100.png",
+        avatar: "https://images.unsplash.com/photo-1525134479668-1bee5c7c6845?q=80&w=100&h=100&auto=format&fit=crop",
         dataAiHint: "woman happy",
         comment: "Affordable and convenient. I use SwiftRoute to get to my campus every day."
     }
@@ -53,7 +53,7 @@ export default function Home() {
       <section className="relative w-full h-[80vh] min-h-[600px] flex items-center justify-center">
         <div className="absolute inset-0 bg-black/50 z-10" />
         <Image
-          src="https://placehold.co/1920x1080.png"
+          src="https://images.unsplash.com/photo-1542367554-b6389422584d?q=80&w=1920&h=1080&auto=format&fit=crop"
           alt="Cityscape background"
           fill
           style={{ objectFit: 'cover' }}

@@ -79,7 +79,7 @@ function ConfirmationContent() {
           </div>
           <div className="h-48 w-full rounded-lg overflow-hidden relative">
             <Image
-              src="https://placehold.co/600x400.png"
+              src="https://images.unsplash.com/photo-1566992648584-9c0b1a6d3652?q=80&w=600&h=400&auto=format&fit=crop"
               alt="Map placeholder"
               fill
               style={{ objectFit: 'cover' }}

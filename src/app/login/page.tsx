@@ -56,7 +56,7 @@ export default function LoginPage() {
     return (
         <div className="flex-1 flex items-center justify-center p-4 relative">
              <Image
-                src="https://placehold.co/1920x1080.png"
+                src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1920&h=1080&auto=format&fit=crop"
                 alt="City background"
                 fill
                 style={{ objectFit: 'cover' }}

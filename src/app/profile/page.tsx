@@ -49,7 +49,7 @@ export default function ProfilePage() {
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="flex flex-col md:flex-row items-center gap-6 mb-12">
           <Avatar className="h-24 w-24 border-4 border-background shadow-lg">
-            <AvatarImage src="https://placehold.co/100x100.png" alt="User avatar" data-ai-hint="person smiling" />
+            <AvatarImage src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&h=100&auto=format&fit=crop" alt="User avatar" data-ai-hint="person smiling" />
             <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
           </Avatar>
           <div>
