@@ -20,7 +20,7 @@ function ConfirmationContent() {
   useEffect(() => {
     if (pickup !== 'N/A' && dropoff !== 'N/A') {
       const newTrip = {
-        id: new Date().toISOString(),
+        id: crypto.randomUUID(),
         date: new Date().toISOString(),
         pickup,
         dropoff,
