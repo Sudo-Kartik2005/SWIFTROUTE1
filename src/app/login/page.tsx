@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from "react";
 import { signIn } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -26,11 +27,24 @@ export default function LoginPage() {
             await signIn(email, password);
             router.push('/profile');
         } catch (err: any) {
-            setError(err.message);
+            let errorMessage = "An unexpected error occurred.";
+            if (err.code) {
+                switch (err.code) {
+                    case 'auth/user-not-found':
+                    case 'auth/wrong-password':
+                    case 'auth/invalid-credential':
+                        errorMessage = 'Invalid email or password. Please try again.';
+                        break;
+                    default:
+                        errorMessage = 'Login failed. Please try again later.';
+                        break;
+                }
+            }
+            setError(errorMessage);
             toast({
                 variant: 'destructive',
                 title: 'Login Failed',
-                description: err.message,
+                description: errorMessage,
             });
         }
     };
@@ -45,6 +59,12 @@ export default function LoginPage() {
                 </CardHeader>
                 <CardContent>
                     <form className="space-y-4" onSubmit={handleLogin}>
+                        {error && (
+                            <Alert variant="destructive">
+                                <AlertTitle>Error</AlertTitle>
+                                <AlertDescription>{error}</AlertDescription>
+                            </Alert>
+                        )}
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
                             <Input id="email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} />

@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from "react";
 import { signUp } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -31,11 +32,28 @@ export default function RegisterPage() {
             });
             router.push('/login');
         } catch (err: any) {
-            setError(err.message);
+            let errorMessage = "An unexpected error occurred.";
+            if (err.code) {
+                switch(err.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'This email address is already in use.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Please enter a valid email address.';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'The password is too weak. Please choose a stronger password.';
+                        break;
+                    default:
+                        errorMessage = 'Registration failed. Please try again later.';
+                        break;
+                }
+            }
+            setError(errorMessage);
             toast({
                 variant: 'destructive',
                 title: 'Registration Failed',
-                description: err.message,
+                description: errorMessage,
             });
         }
     };
@@ -50,6 +68,12 @@ export default function RegisterPage() {
                 </CardHeader>
                 <CardContent>
                     <form className="space-y-4" onSubmit={handleRegister}>
+                        {error && (
+                            <Alert variant="destructive">
+                                <AlertTitle>Error</AlertTitle>
+                                <AlertDescription>{error}</AlertDescription>
+                            </Alert>
+                        )}
                         <div className="space-y-2">
                             <Label htmlFor="name">Name</Label>
                             <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} />
