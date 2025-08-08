@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { Car, Twitter, Facebook, Instagram } from "lucide-react";
 
@@ -16,16 +17,16 @@ export function Footer() {
                     <div>
                         <h3 className="font-semibold text-lg mb-4">Company</h3>
                         <ul className="space-y-2">
-                            <li><Link href="#" className="hover:underline text-primary-foreground/80">About Us</Link></li>
-                            <li><Link href="#" className="hover:underline text-primary-foreground/80">Careers</Link></li>
+                            <li><Link href="/about" className="hover:underline text-primary-foreground/80">About Us</Link></li>
+                            <li><Link href="/careers" className="hover:underline text-primary-foreground/80">Careers</Link></li>
                             <li><Link href="/help" className="hover:underline text-primary-foreground/80">Help</Link></li>
                         </ul>
                     </div>
                     <div>
                         <h3 className="font-semibold text-lg mb-4">Legal</h3>
                         <ul className="space-y-2">
-                            <li><Link href="#" className="hover:underline text-primary-foreground/80">Terms of Service</Link></li>
-                            <li><Link href="#" className="hover:underline text-primary-foreground/80">Privacy Policy</Link></li>
+                            <li><Link href="/terms" className="hover:underline text-primary-foreground/80">Terms of Service</Link></li>
+                            <li><Link href="/privacy" className="hover:underline text-primary-foreground/80">Privacy Policy</Link></li>
                         </ul>
                     </div>
                     <div>
