@@ -25,7 +25,7 @@ function ConfirmationContent() {
       const id = crypto.randomUUID();
       setTripId(id);
       const newTrip = {
-        id,
+        id: id,
         date: new Date().toISOString(),
         pickup,
         dropoff,
