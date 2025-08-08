@@ -3,7 +3,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, DollarSign, Loader2, MapPin, PackageOpen, Car } from "lucide-react";
+import { Calendar, Loader2, MapPin, PackageOpen, Car } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
@@ -84,8 +84,7 @@ export default function ProfilePage() {
                     <Separator orientation="vertical" className="hidden sm:block h-20 mx-4" />
                     <div className="flex flex-col items-end gap-2 w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-none">
                         <div className="flex items-center gap-2 text-lg font-bold text-primary">
-                            <DollarSign className="h-5 w-5" />
-                            <span>{trip.fare.toFixed(2)}</span>
+                            <span>₹{trip.fare.toFixed(2)}</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                             <Car className="h-4 w-4" />
