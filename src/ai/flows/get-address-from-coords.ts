@@ -40,14 +40,6 @@ const getAddressTool = ai.defineTool(
     }
 );
 
-const prompt = ai.definePrompt({
-    name: 'addressFromCoordsPrompt',
-    input: {schema: GetAddressFromCoordsInputSchema},
-    output: {schema: GetAddressFromCoordsOutputSchema},
-    tools: [getAddressTool],
-    prompt: `Given the latitude and longitude, use the provided tool to find the human-readable address. Then, return it in the 'address' field.`,
-});
-
 
 const getAddressFromCoordsFlow = ai.defineFlow(
   {
@@ -56,8 +48,8 @@ const getAddressFromCoordsFlow = ai.defineFlow(
     outputSchema: GetAddressFromCoordsOutputSchema,
   },
   async (input) => {
-    const {output} = await prompt(input);
-    return output!;
+    const toolResult = await getAddressTool(input);
+    return { address: toolResult.display_name };
   }
 );
 
