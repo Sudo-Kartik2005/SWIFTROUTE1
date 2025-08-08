@@ -2,7 +2,6 @@
 'use client';
 
 import { useActionState, useEffect, useState, useRef } from 'react';
-import { useFormStatus } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { MapPin, DollarSign, Loader2, LocateFixed, ArrowRight, Car, User, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,17 +17,16 @@ const initialState: FareEstimateState = {
   success: false,
 };
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
+function SubmitButton({ isPending }: { isPending: boolean }) {
   return (
-    <Button type="submit" size="lg" className="w-full font-bold" disabled={pending}>
-      {pending ? <Loader2 className="animate-spin" /> : 'Get Fare Estimate'}
+    <Button type="submit" size="lg" className="w-full font-bold" disabled={isPending}>
+      {isPending ? <Loader2 className="animate-spin" /> : 'Get Fare Estimate'}
     </Button>
   );
 }
 
 export function RideRequestForm() {
-  const [state, formAction] = useActionState(handleEstimateFare, initialState);
+  const [state, formAction, isPending] = useActionState(handleEstimateFare, initialState);
   const { toast } = useToast();
   const router = useRouter();
   const [isLocating, setIsLocating] = useState(false);
@@ -161,13 +159,13 @@ export function RideRequestForm() {
 
             <Separator />
 
-            <SubmitButton />
+            <SubmitButton isPending={isPending} />
           </form>
         </CardContent>
       </Card>
 
       {state.success && state.estimatedFare !== undefined && (
-        <Card className="mt-8 shadow-2xl animate-in fade-in-50 border-2 border-accent">
+        <Card className="mt-8 shadow-2xl animate-in fade-in-50 border-2 border-accent bg-card/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle>Fare Estimate</CardTitle>
             <CardDescription>Review your trip details and confirm.</CardDescription>

@@ -1,9 +1,10 @@
+
 'use client';
 
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { CheckCircle, MapPin, DollarSign, ArrowRight, Car } from 'lucide-react';
+import { CheckCircle, MapPin, DollarSign, Car } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -18,7 +19,7 @@ function ConfirmationContent() {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-4 text-center bg-background">
-      <Card className="w-full max-w-lg shadow-2xl animate-in fade-in-50 border-2 border-green-500">
+      <Card className="w-full max-w-lg shadow-2xl animate-in fade-in-50 border-2 border-green-500 bg-card/80 backdrop-blur-sm">
         <CardHeader className="items-center">
           <CheckCircle className="h-16 w-16 text-green-500 mb-4" />
           <CardTitle className="text-3xl font-bold">Ride Confirmed!</CardTitle>
@@ -35,7 +36,7 @@ function ConfirmationContent() {
             </div>
             <Separator />
             <div className="flex items-center gap-4">
-              <MapPin className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+              <MapPin className="h-5 w-5 text-green-500 flex-shrink-0" />
               <div>
                 <p className="text-xs text-muted-foreground">From</p>
                 <p className="font-semibold">{pickup}</p>
@@ -43,7 +44,7 @@ function ConfirmationContent() {
             </div>
             <Separator />
             <div className="flex items-center gap-4">
-              <MapPin className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+              <MapPin className="h-5 w-5 text-red-500 flex-shrink-0" />
               <div>
                 <p className="text-xs text-muted-foreground">To</p>
                 <p className="font-semibold">{dropoff}</p>
@@ -52,7 +53,7 @@ function ConfirmationContent() {
              <Separator />
             <div className="flex items-center justify-between pt-2">
               <div className="flex items-center gap-4">
-                <p className="font-semibold text-lg">₹</p>
+                <DollarSign className="h-5 w-5 text-muted-foreground" />
                 <p className="font-semibold">Estimated Fare</p>
               </div>
               <p className="font-bold text-xl">₹{parseFloat(fare).toFixed(2)}</p>

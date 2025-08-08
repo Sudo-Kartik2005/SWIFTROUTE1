@@ -50,30 +50,28 @@ export default function ProfilePage() {
         <div className="space-y-4">
           {tripHistory.length > 0 ? (
             tripHistory.map((trip) => (
-              <Card key={trip.id} className="shadow-lg transition-all hover:shadow-xl hover:border-accent border-2 border-transparent">
+              <Card key={trip.id} className="shadow-lg transition-all hover:shadow-xl hover:border-accent border-2 border-transparent bg-card/80 backdrop-blur-sm">
                 <CardContent className="p-6">
                   <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                     <div className="flex-1 space-y-3">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4" />
-                          <span>{trip.pickup}</span>
-                        </div>
-                        <ArrowRight className="h-4 w-4 mx-2 shrink-0" />
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4" />
-                          <span>{trip.dropoff}</span>
-                        </div>
+                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Calendar className="h-4 w-4" />
+                          <span>{new Date(trip.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-5 w-5 text-green-500" />
+                        <p className="font-semibold">{trip.pickup}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                         <MapPin className="h-5 w-5 text-red-500" />
+                         <p className="font-semibold">{trip.dropoff}</p>
                       </div>
                     </div>
-                    <Separator orientation="vertical" className="hidden sm:block h-10 mx-4" />
+                    <Separator orientation="vertical" className="hidden sm:block h-12 mx-4" />
                     <div className="flex items-center justify-between sm:justify-start gap-6 pt-4 sm:pt-0 border-t sm:border-none">
-                      <div className="flex items-center gap-2 text-sm">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <span>{new Date(trip.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-lg font-bold text-primary">
-                        <span>₹{trip.fare.toFixed(2)}</span>
+                      <div className="flex items-center gap-2 text-xl font-bold text-primary">
+                        <DollarSign className="h-5 w-5" />
+                        <span>{trip.fare.toFixed(2)}</span>
                       </div>
                     </div>
                   </div>
@@ -81,7 +79,7 @@ export default function ProfilePage() {
               </Card>
             ))
           ) : (
-            <Card className="shadow-lg border-2 border-dashed">
+            <Card className="shadow-lg border-2 border-dashed bg-card/80 backdrop-blur-sm">
                 <CardContent className="p-12 flex flex-col items-center justify-center text-center">
                     <PackageOpen className="h-16 w-16 text-muted-foreground mb-4" />
                     <h3 className="text-xl font-semibold">No Trips Yet</h3>
