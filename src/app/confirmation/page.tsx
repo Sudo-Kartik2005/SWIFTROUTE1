@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { CheckCircle, MapPin, DollarSign, ArrowRight } from 'lucide-react';
+import { CheckCircle, MapPin, DollarSign, ArrowRight, Car } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -14,6 +14,7 @@ function ConfirmationContent() {
   const pickup = searchParams.get('pickup') || 'N/A';
   const dropoff = searchParams.get('dropoff') || 'N/A';
   const fare = searchParams.get('fare') || '0';
+  const vehicleType = searchParams.get('vehicleType') || 'Economy';
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-4 text-center bg-background">
@@ -25,6 +26,14 @@ function ConfirmationContent() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="border rounded-lg p-4 space-y-4 text-left">
+            <div className="flex items-center gap-4">
+                <Car className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                <div>
+                    <p className="text-xs text-muted-foreground">Vehicle Type</p>
+                    <p className="font-semibold">{vehicleType}</p>
+                </div>
+            </div>
+            <Separator />
             <div className="flex items-center gap-4">
               <MapPin className="h-5 w-5 text-muted-foreground flex-shrink-0" />
               <div>

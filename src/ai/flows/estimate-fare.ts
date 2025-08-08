@@ -17,6 +17,9 @@ const EstimateFareInputSchema = z.object({
   dropoffLocation: z
     .string()
     .describe('The latitude and longitude of the dropoff location.'),
+  vehicleType: z
+    .string()
+    .describe('The type of vehicle selected by the user (e.g., Economy, Premium, SUV).'),
 });
 export type EstimateFareInput = z.infer<typeof EstimateFareInputSchema>;
 
@@ -37,11 +40,17 @@ const prompt = ai.definePrompt({
   output: {schema: EstimateFareOutputSchema},
   prompt: `You are an expert fare estimator for a ride-sharing app operating in India.
 
-  Given the pickup and dropoff locations, estimate the fare for the ride in Indian Rupees (INR).
+  Given the pickup and dropoff locations, and the vehicle type, estimate the fare for the ride in Indian Rupees (INR).
   Take into account distance, time, and real-time traffic data for Indian cities.
+
+  Apply the following multipliers based on vehicle type:
+  - Economy: 1x
+  - Premium: 1.5x
+  - SUV: 2x
 
   Pickup Location: {{{pickupLocation}}}
   Dropoff Location: {{{dropoffLocation}}}
+  Vehicle Type: {{{vehicleType}}}
 
   Estimated Fare:`,
 });
