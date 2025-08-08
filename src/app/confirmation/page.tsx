@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useSearchParams } from 'next/navigation';
@@ -24,6 +25,7 @@ function ConfirmationContent() {
     if (pickup !== 'N/A' && dropoff !== 'N/A' && !tripSaved) {
       const id = crypto.randomUUID();
       setTripId(id);
+      
       const newTrip = {
         id: id,
         date: new Date().toISOString(),
@@ -34,10 +36,22 @@ function ConfirmationContent() {
       };
 
       const existingTrips = JSON.parse(localStorage.getItem('tripHistory') || '[]');
-      const updatedTrips = [...existingTrips, newTrip];
-      localStorage.setItem('tripHistory', JSON.stringify(updatedTrips));
-      // Store trip details by ID for sharing
-      localStorage.setItem(`trip_${id}`, JSON.stringify(newTrip));
+      
+      // Prevent adding duplicate trips in quick succession (handles Strict Mode double-invocation)
+      const isDuplicate = existingTrips.some((trip: any) => 
+        trip.pickup === newTrip.pickup &&
+        trip.dropoff === newTrip.dropoff &&
+        trip.fare === newTrip.fare &&
+        Math.abs(new Date(trip.date).getTime() - new Date(newTrip.date).getTime()) < 2000
+      );
+
+      if (!isDuplicate) {
+        const updatedTrips = [...existingTrips, newTrip];
+        localStorage.setItem('tripHistory', JSON.stringify(updatedTrips));
+        // Store trip details by ID for sharing
+        localStorage.setItem(`trip_${id}`, JSON.stringify(newTrip));
+      }
+      
       setTripSaved(true);
     }
   }, [pickup, dropoff, fare, vehicleType, tripSaved]);

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -62,8 +63,8 @@ export default function ProfilePage() {
         
         <div className="space-y-4">
           {tripHistory.length > 0 ? (
-            tripHistory.map((trip) => (
-              <Card key={trip.id} className="shadow-lg transition-all hover:shadow-xl hover:border-accent border-2 border-transparent bg-card/80 backdrop-blur-sm">
+            tripHistory.map((trip, index) => (
+              <Card key={`${trip.id}-${index}`} className="shadow-lg transition-all hover:shadow-xl hover:border-accent border-2 border-transparent bg-card/80 backdrop-blur-sm">
                 <CardContent className="p-6">
                   <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                     <div className="flex-1 space-y-3">
