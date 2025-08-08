@@ -3,25 +3,38 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowRight, Calendar, DollarSign, Loader2, MapPin, PackageOpen } from "lucide-react";
+import { ArrowRight, Calendar, DollarSign, Loader2, MapPin, PackageOpen, Car } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-// Placeholder for trip history. In a real app, this would be fetched from a database.
-const tripHistory: any[] = [];
-
+interface Trip {
+    id: string;
+    date: string;
+    pickup: string;
+    dropoff: string;
+    fare: number;
+    vehicleType: string;
+}
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const [tripHistory, setTripHistory] = useState<Trip[]>([]);
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
     }
   }, [user, loading, router]);
+
+  useEffect(() => {
+      const storedTrips = localStorage.getItem('tripHistory');
+      if (storedTrips) {
+          setTripHistory(JSON.parse(storedTrips).reverse());
+      }
+  }, []);
 
   if (loading || !user) {
     return (
@@ -67,12 +80,16 @@ export default function ProfilePage() {
                          <p className="font-semibold">{trip.dropoff}</p>
                       </div>
                     </div>
-                    <Separator orientation="vertical" className="hidden sm:block h-12 mx-4" />
-                    <div className="flex items-center justify-between sm:justify-start gap-6 pt-4 sm:pt-0 border-t sm:border-none">
-                      <div className="flex items-center gap-2 text-xl font-bold text-primary">
-                        <DollarSign className="h-5 w-5" />
-                        <span>{trip.fare.toFixed(2)}</span>
-                      </div>
+                    <Separator orientation="vertical" className="hidden sm:block h-20 mx-4" />
+                    <div className="flex flex-col items-end gap-2 w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-none">
+                        <div className="flex items-center gap-2 text-lg font-bold text-primary">
+                            <DollarSign className="h-5 w-5" />
+                            <span>{trip.fare.toFixed(2)}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Car className="h-4 w-4" />
+                            <span>{trip.vehicleType}</span>
+                        </div>
                     </div>
                   </div>
                 </CardContent>

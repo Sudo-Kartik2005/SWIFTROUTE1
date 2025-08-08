@@ -2,7 +2,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { CheckCircle, MapPin, DollarSign, Car } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,24 @@ function ConfirmationContent() {
   const dropoff = searchParams.get('dropoff') || 'N/A';
   const fare = searchParams.get('fare') || '0';
   const vehicleType = searchParams.get('vehicleType') || 'Economy';
+
+  useEffect(() => {
+    if (pickup !== 'N/A' && dropoff !== 'N/A') {
+      const newTrip = {
+        id: new Date().toISOString(),
+        date: new Date().toISOString(),
+        pickup,
+        dropoff,
+        fare: parseFloat(fare),
+        vehicleType,
+      };
+
+      const existingTrips = JSON.parse(localStorage.getItem('tripHistory') || '[]');
+      const updatedTrips = [...existingTrips, newTrip];
+      localStorage.setItem('tripHistory', JSON.stringify(updatedTrips));
+    }
+  }, [pickup, dropoff, fare, vehicleType]);
+
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-4 text-center bg-background">
