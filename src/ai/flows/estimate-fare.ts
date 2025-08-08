@@ -23,7 +23,7 @@ export type EstimateFareInput = z.infer<typeof EstimateFareInputSchema>;
 const EstimateFareOutputSchema = z.object({
   estimatedFare: z
     .number()
-    .describe('The estimated fare for the ride in US dollars.'),
+    .describe('The estimated fare for the ride in Indian Rupees (INR).'),
 });
 export type EstimateFareOutput = z.infer<typeof EstimateFareOutputSchema>;
 
@@ -35,10 +35,10 @@ const prompt = ai.definePrompt({
   name: 'estimateFarePrompt',
   input: {schema: EstimateFareInputSchema},
   output: {schema: EstimateFareOutputSchema},
-  prompt: `You are an expert fare estimator for a ride-sharing app.
+  prompt: `You are an expert fare estimator for a ride-sharing app operating in India.
 
-  Given the pickup and dropoff locations, estimate the fare for the ride in US dollars.
-  Take into account distance, time, and real-time traffic data.
+  Given the pickup and dropoff locations, estimate the fare for the ride in Indian Rupees (INR).
+  Take into account distance, time, and real-time traffic data for Indian cities.
 
   Pickup Location: {{{pickupLocation}}}
   Dropoff Location: {{{dropoffLocation}}}

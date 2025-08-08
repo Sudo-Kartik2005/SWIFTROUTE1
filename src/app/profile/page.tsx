@@ -14,21 +14,21 @@ const tripHistory = [
     date: "2024-07-20",
     pickup: "123 Main St, Anytown, USA",
     dropoff: "456 Oak Ave, Sometown, USA",
-    fare: 25.50,
+    fare: 1850.50,
   },
   {
     id: 2,
     date: "2024-07-18",
     pickup: "789 Pine Ln, Yourtown, USA",
     dropoff: "101 Maple Dr, Mytown, USA",
-    fare: 15.75,
+    fare: 1250.75,
   },
   {
     id: 3,
     date: "2024-07-15",
     pickup: "212 Elm St, Heretown, USA",
     dropoff: "333 Birch Rd, Theirtown, USA",
-    fare: 32.00,
+    fare: 2500.00,
   },
 ];
 
@@ -92,7 +92,7 @@ export default function ProfilePage() {
                       <span>{new Date(trip.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                     </div>
                     <div className="flex items-center gap-2 text-lg font-bold text-primary">
-                      <span>${trip.fare.toFixed(2)}</span>
+                      <span>₹{trip.fare.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>

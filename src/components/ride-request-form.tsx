@@ -153,7 +153,7 @@ export function RideRequestForm() {
                 </div>
             </div>
             <div className="flex items-center justify-center text-4xl font-bold py-4">
-              <DollarSign className="h-8 w-8 mr-2 text-accent" />
+              <span className="text-accent text-3xl mr-2">₹</span>
               <span>{state.estimatedFare.toFixed(2)}</span>
             </div>
             <p className="text-xs text-center text-muted-foreground">

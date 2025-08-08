@@ -43,10 +43,10 @@ function ConfirmationContent() {
              <Separator />
             <div className="flex items-center justify-between pt-2">
               <div className="flex items-center gap-4">
-                <DollarSign className="h-5 w-5 text-muted-foreground" />
+                <p className="font-semibold text-lg">₹</p>
                 <p className="font-semibold">Estimated Fare</p>
               </div>
-              <p className="font-bold text-xl">${parseFloat(fare).toFixed(2)}</p>
+              <p className="font-bold text-xl">₹{parseFloat(fare).toFixed(2)}</p>
             </div>
           </div>
           <div className="h-48 w-full rounded-lg overflow-hidden relative">
