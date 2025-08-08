@@ -2,25 +2,30 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { CheckCircle, MapPin, DollarSign, Car, Loader2 } from 'lucide-react';
+import { CheckCircle, MapPin, DollarSign, Car, Loader2, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
 
 function ConfirmationContent() {
+  const { toast } = useToast();
   const searchParams = useSearchParams();
   const pickup = searchParams.get('pickup') || 'N/A';
   const dropoff = searchParams.get('dropoff') || 'N/A';
   const fare = searchParams.get('fare') || '0';
   const vehicleType = searchParams.get('vehicleType') || 'Economy';
+  const [tripId, setTripId] = useState<string | null>(null);
 
   useEffect(() => {
     if (pickup !== 'N/A' && dropoff !== 'N/A') {
+      const id = crypto.randomUUID();
+      setTripId(id);
       const newTrip = {
-        id: crypto.randomUUID(),
+        id,
         date: new Date().toISOString(),
         pickup,
         dropoff,
@@ -31,8 +36,21 @@ function ConfirmationContent() {
       const existingTrips = JSON.parse(localStorage.getItem('tripHistory') || '[]');
       const updatedTrips = [...existingTrips, newTrip];
       localStorage.setItem('tripHistory', JSON.stringify(updatedTrips));
+      // Store trip details by ID for sharing
+      localStorage.setItem(`trip_${id}`, JSON.stringify(newTrip));
     }
   }, [pickup, dropoff, fare, vehicleType]);
+
+  const handleShare = () => {
+    if (tripId) {
+      const shareUrl = `${window.location.origin}/share/${tripId}`;
+      navigator.clipboard.writeText(shareUrl);
+      toast({
+        title: 'Link Copied!',
+        description: 'Ride sharing link has been copied to your clipboard.',
+      });
+    }
+  };
 
 
   return (
@@ -87,9 +105,15 @@ function ConfirmationContent() {
               sizes="(max-width: 768px) 100vw, 500px"
             />
           </div>
-          <Button asChild className="w-full" size="lg">
-            <Link href="/">Book Another Ride</Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Button asChild className="w-full" size="lg">
+              <Link href="/">Book Another Ride</Link>
+            </Button>
+            <Button onClick={handleShare} className="w-full" size="lg" variant="outline">
+              <Share2 className="mr-2 h-5 w-5" />
+              Share Ride
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>
