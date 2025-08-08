@@ -12,7 +12,7 @@ export function Header() {
             <span className="font-bold text-lg">SwiftRoute</span>
           </Link>
         </div>
-        <nav className="flex items-center space-x-2 sm:space-x-4">
+        <nav className="flex items-center space-x-1 sm:space-x-2">
           <Button variant="ghost" asChild>
             <Link href="/profile" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
               My Trips
@@ -21,6 +21,16 @@ export function Header() {
           <Button variant="ghost" asChild>
             <Link href="/help" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
               Help
+            </Link>
+          </Button>
+           <Button variant="ghost" asChild>
+            <Link href="/login" className="text-sm font-medium">
+              Login
+            </Link>
+          </Button>
+          <Button asChild>
+            <Link href="/register" className="text-sm font-medium">
+              Register
             </Link>
           </Button>
         </nav>
