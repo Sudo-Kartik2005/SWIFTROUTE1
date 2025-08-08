@@ -7,8 +7,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UserPlus } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
+    const router = useRouter();
+
+    const handleRegister = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        // In a real application, you would handle registration logic here.
+        // For this prototype, we'll just redirect to the login page.
+        router.push('/login');
+    };
+
     return (
         <div className="flex-1 flex items-center justify-center p-4 bg-background">
             <Card className="w-full max-w-sm shadow-2xl animate-in fade-in-50">
@@ -18,7 +28,7 @@ export default function RegisterPage() {
                     <CardDescription>Join SwiftRoute to start booking rides.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form className="space-y-4">
+                    <form className="space-y-4" onSubmit={handleRegister}>
                         <div className="space-y-2">
                             <Label htmlFor="name">Name</Label>
                             <Input id="name" required />
