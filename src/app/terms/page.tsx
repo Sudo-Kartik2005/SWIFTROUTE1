@@ -9,7 +9,7 @@ export default function TermsPage() {
           <div className="text-center mb-12">
             <Shield className="mx-auto h-16 w-16 text-primary mb-4" />
             <h1 className="text-4xl font-bold">Terms of Service</h1>
-            <p className="text-muted-foreground mt-2">Last Updated: {new Date().toLocaleDateString()}</p>
+            <p className="text-muted-foreground mt-2">Last Updated: August 8, 2024</p>
           </div>
 
           <div className="prose prose-lg max-w-none text-card-foreground">
