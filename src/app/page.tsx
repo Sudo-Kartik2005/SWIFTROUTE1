@@ -50,19 +50,10 @@ const testimonials = [
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      <section className="relative w-full h-[80vh] min-h-[600px] flex items-center justify-center">
-        <div className="absolute inset-0 bg-black/50 z-10" />
-        <Image
-          src="https://images.unsplash.com/photo-1528291353264-7538a71d79d1?q=80&w=1920&h=1080&auto=format&fit=crop"
-          alt="Aerial view of a modern smart city with roads glowing at night"
-          fill
-          style={{ objectFit: 'cover' }}
-          className="absolute inset-0 z-0"
-          data-ai-hint="aerial city night"
-          sizes="100vw"
-          priority
-        />
-        <div className="relative z-20 w-full max-w-4xl px-4 text-center text-white">
+      <section className="relative w-full h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary to-background z-10" />
+         <div className="absolute -bottom-1/2 -left-1/2 w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,_rgba(var(--accent),0.1),_transparent_40%)]" />
+        <div className="relative z-20 w-full max-w-4xl px-4 text-center text-primary-foreground">
             <h1 className="text-4xl md:text-6xl font-bold mb-4">Get a ride in minutes</h1>
             <p className="text-lg md:text-xl mb-8">The best way to get wherever you're going.</p>
             <div className="w-full max-w-2xl mx-auto">
