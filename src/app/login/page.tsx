@@ -12,6 +12,7 @@ import { useState } from "react";
 import { signIn } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import Image from "next/image";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -35,6 +36,9 @@ export default function LoginPage() {
                     case 'auth/invalid-credential':
                         errorMessage = 'Invalid email or password. Please try again.';
                         break;
+                    case 'auth/configuration-not-found':
+                         errorMessage = 'Authentication is not configured. Please enable Email/Password sign-in in your Firebase project.';
+                         break;
                     default:
                         errorMessage = `Login failed: ${err.message}`;
                         break;
@@ -50,8 +54,18 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="flex-1 flex items-center justify-center p-4 bg-background">
-            <Card className="w-full max-w-sm shadow-2xl animate-in fade-in-50">
+        <div className="flex-1 flex items-center justify-center p-4 relative">
+             <Image
+                src="https://placehold.co/1920x1080.png"
+                alt="City background"
+                fill
+                style={{ objectFit: 'cover' }}
+                className="absolute inset-0 z-0 opacity-20"
+                data-ai-hint="abstract background"
+                sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background z-0" />
+            <Card className="w-full max-w-sm shadow-2xl animate-in fade-in-50 z-10 bg-card/80 backdrop-blur-sm">
                 <CardHeader className="text-center">
                     <div className="mx-auto bg-primary text-primary-foreground p-3 rounded-full mb-4">
                         <LogIn className="h-8 w-8" />
