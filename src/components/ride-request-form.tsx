@@ -1,6 +1,8 @@
+
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { MapPin, DollarSign, ArrowRight, Loader2 } from 'lucide-react';
@@ -24,7 +26,7 @@ function SubmitButton() {
 }
 
 export function RideRequestForm() {
-  const [state, formAction] = useFormState(handleEstimateFare, initialState);
+  const [state, formAction] = useActionState(handleEstimateFare, initialState);
   const { toast } = useToast();
   const router = useRouter();
 
