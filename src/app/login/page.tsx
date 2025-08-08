@@ -53,8 +53,10 @@ export default function LoginPage() {
         <div className="flex-1 flex items-center justify-center p-4 bg-background">
             <Card className="w-full max-w-sm shadow-2xl animate-in fade-in-50">
                 <CardHeader className="text-center">
-                    <LogIn className="mx-auto h-12 w-12 mb-4" />
-                    <CardTitle className="text-2xl">Welcome Back</CardTitle>
+                    <div className="mx-auto bg-primary text-primary-foreground p-3 rounded-full mb-4">
+                        <LogIn className="h-8 w-8" />
+                    </div>
+                    <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
                     <CardDescription>Enter your credentials to access your account.</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -79,7 +81,7 @@ export default function LoginPage() {
                     </form>
                     <div className="mt-4 text-center text-sm">
                         Don't have an account?{" "}
-                        <Link href="/register" className="underline">
+                        <Link href="/register" className="underline text-accent font-semibold">
                             Sign up
                         </Link>
                     </div>

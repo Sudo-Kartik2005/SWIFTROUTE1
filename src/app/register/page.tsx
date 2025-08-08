@@ -62,8 +62,10 @@ export default function RegisterPage() {
         <div className="flex-1 flex items-center justify-center p-4 bg-background">
             <Card className="w-full max-w-sm shadow-2xl animate-in fade-in-50">
                 <CardHeader className="text-center">
-                    <UserPlus className="mx-auto h-12 w-12 mb-4" />
-                    <CardTitle className="text-2xl">Create an Account</CardTitle>
+                    <div className="mx-auto bg-primary text-primary-foreground p-3 rounded-full mb-4">
+                        <UserPlus className="h-8 w-8" />
+                    </div>
+                    <CardTitle className="text-2xl font-bold">Create an Account</CardTitle>
                     <CardDescription>Join SwiftRoute to start booking rides.</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -92,7 +94,7 @@ export default function RegisterPage() {
                     </form>
                     <div className="mt-4 text-center text-sm">
                         Already have an account?{" "}
-                        <Link href="/login" className="underline">
+                        <Link href="/login" className="underline text-accent font-semibold">
                             Login
                         </Link>
                     </div>

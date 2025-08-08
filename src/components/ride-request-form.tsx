@@ -4,12 +4,13 @@
 import { useActionState, useEffect, useState, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useRouter } from 'next/navigation';
-import { MapPin, DollarSign, Loader2, LocateFixed } from 'lucide-react';
+import { MapPin, DollarSign, Loader2, LocateFixed, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
 import { handleEstimateFare, fetchAddressFromCoords, type FareEstimateState } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
+import { Separator } from './ui/separator';
 
 const initialState: FareEstimateState = {
   success: false,
@@ -18,7 +19,7 @@ const initialState: FareEstimateState = {
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={pending}>
+    <Button type="submit" size="lg" className="w-full font-bold" disabled={pending}>
       {pending ? <Loader2 className="animate-spin" /> : 'Get Fare Estimate'}
     </Button>
   );
@@ -91,9 +92,9 @@ export function RideRequestForm() {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <Card className="shadow-2xl bg-card/90 backdrop-blur-sm">
+      <Card className="shadow-2xl bg-card/95 backdrop-blur-sm border-2">
         <CardHeader>
-          <CardTitle className="text-2xl">Where to?</CardTitle>
+          <CardTitle className="text-2xl font-bold">Where to?</CardTitle>
           <CardDescription>Enter your pickup and drop-off locations.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -103,7 +104,7 @@ export function RideRequestForm() {
               <Input
                 name="pickupLocation"
                 placeholder="Enter pick-up location"
-                className="pl-10 pr-10"
+                className="pl-10 pr-10 h-12 text-base"
                 required
                 ref={pickupInputRef}
               />
@@ -111,7 +112,7 @@ export function RideRequestForm() {
                 type="button"
                 variant="ghost"
                 size="icon"
-                className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 text-muted-foreground hover:text-accent"
                 onClick={handleGetCurrentLocation}
                 disabled={isLocating}
                 aria-label="Use Current Location"
@@ -124,7 +125,7 @@ export function RideRequestForm() {
               <Input
                 name="dropoffLocation"
                 placeholder="Enter drop-off location"
-                className="pl-10"
+                className="pl-10 h-12 text-base"
                 required
               />
             </div>
@@ -134,26 +135,31 @@ export function RideRequestForm() {
       </Card>
 
       {state.success && state.estimatedFare !== undefined && (
-        <Card className="mt-8 shadow-2xl animate-in fade-in-50">
+        <Card className="mt-8 shadow-2xl animate-in fade-in-50 border-2 border-accent">
           <CardHeader>
             <CardTitle>Fare Estimate</CardTitle>
             <CardDescription>Review your trip details and confirm.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex flex-col space-y-2 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-green-500" />
-                    <span className='font-medium text-foreground'>From:</span>
-                    <span>{state.pickupLocation}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-red-500" />
-                    <span className='font-medium text-foreground'>To:</span>
-                    <span>{state.dropoffLocation}</span>
-                </div>
+            <div className="border rounded-lg p-4 space-y-3">
+              <div className="flex items-start gap-3">
+                  <MapPin className="h-5 w-5 text-green-500 mt-1" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">From</p>
+                    <p className="font-semibold">{state.pickupLocation}</p>
+                  </div>
+              </div>
+              <Separator/>
+              <div className="flex items-start gap-3">
+                  <MapPin className="h-5 w-5 text-red-500 mt-1" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">To</p>
+                    <p className="font-semibold">{state.dropoffLocation}</p>
+                  </div>
+              </div>
             </div>
-            <div className="flex items-center justify-center text-4xl font-bold py-4">
-              <span className="text-accent text-3xl mr-2">₹</span>
+            <div className="flex items-baseline justify-center text-5xl font-bold py-4">
+              <span className="text-3xl mr-1">₹</span>
               <span>{state.estimatedFare.toFixed(2)}</span>
             </div>
             <p className="text-xs text-center text-muted-foreground">
@@ -161,8 +167,8 @@ export function RideRequestForm() {
             </p>
           </CardContent>
           <CardFooter>
-            <Button className="w-full" onClick={handleConfirmRide}>
-              Confirm Ride
+            <Button size="lg" className="w-full font-bold" onClick={handleConfirmRide}>
+              Confirm Ride <ArrowRight className="ml-2"/>
             </Button>
           </CardFooter>
         </Card>

@@ -17,10 +17,10 @@ function ConfirmationContent() {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-4 text-center bg-background">
-      <Card className="w-full max-w-lg shadow-2xl animate-in fade-in-50">
+      <Card className="w-full max-w-lg shadow-2xl animate-in fade-in-50 border-2 border-green-500">
         <CardHeader className="items-center">
           <CheckCircle className="h-16 w-16 text-green-500 mb-4" />
-          <CardTitle className="text-3xl">Ride Confirmed!</CardTitle>
+          <CardTitle className="text-3xl font-bold">Ride Confirmed!</CardTitle>
           <CardDescription>Your SwiftRoute is on the way.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -59,7 +59,7 @@ function ConfirmationContent() {
               sizes="(max-width: 768px) 100vw, 500px"
             />
           </div>
-          <Button asChild className="w-full">
+          <Button asChild className="w-full" size="lg">
             <Link href="/">Book Another Ride</Link>
           </Button>
         </CardContent>

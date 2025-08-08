@@ -53,10 +53,10 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="flex-1 w-full bg-background">
+    <div className="flex-1 w-full bg-secondary">
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="flex flex-col md:flex-row items-center gap-6 mb-12">
-          <Avatar className="h-24 w-24 border-2 border-primary">
+          <Avatar className="h-24 w-24 border-4 border-background shadow-lg">
             <AvatarImage src="https://placehold.co/100x100.png" alt="User avatar" data-ai-hint="profile portrait" />
             <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
           </Avatar>
@@ -68,9 +68,9 @@ export default function ProfilePage() {
 
         <h2 className="text-2xl font-bold mb-6">Trip History</h2>
         
-        <div className="space-y-6">
+        <div className="space-y-4">
           {tripHistory.map((trip) => (
-            <Card key={trip.id} className="shadow-lg transition-all hover:shadow-xl">
+            <Card key={trip.id} className="shadow-lg transition-all hover:shadow-xl hover:border-accent border-2 border-transparent">
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                   <div className="flex-1 space-y-3">
