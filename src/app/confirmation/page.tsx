@@ -16,8 +16,8 @@ function ConfirmationContent() {
   const searchParams = useSearchParams();
   const pickup = searchParams.get('pickup') || 'N/A';
   const dropoff = searchParams.get('dropoff') || 'N/A';
-  const fare = searchParams.get('fare') || '0';
-  const vehicleType = searchParams.get('vehicleType') || 'Economy';
+  const fare = search_params.get('fare') || '0';
+  const vehicleType = search_params.get('vehicleType') || 'Economy';
   const [tripId, setTripId] = useState<string | null>(null);
 
   useEffect(() => {

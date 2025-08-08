@@ -7,6 +7,8 @@ import { MapPin, Car, Clock, Loader2, ShieldCheck } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 interface Trip {
     id: string;
@@ -84,7 +86,7 @@ export default function SharePage({ params }: { params: { tripId: string } }) {
                 />
                  <div className="absolute inset-0 flex items-center justify-center">
                     <div className="absolute top-1/4 left-1/4 bg-green-500 rounded-full h-4 w-4 transform -translate-x-1/2 -translate-y-1/2" />
-                    <div 
+                    <div
                         className="absolute bg-blue-500 rounded-full h-6 w-6 border-2 border-white shadow-lg transition-all duration-1000 ease-linear"
                         style={{ top: `${25 + (progress/100 * 50)}%`, left: `${25 + (progress/100 * 50)}%` }}
                     />
@@ -143,4 +145,3 @@ export default function SharePage({ params }: { params: { tripId: string } }) {
     </div>
   );
 }
-
