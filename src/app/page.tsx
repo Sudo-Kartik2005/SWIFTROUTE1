@@ -53,12 +53,12 @@ export default function Home() {
       <section className="relative w-full h-[80vh] min-h-[600px] flex items-center justify-center">
         <div className="absolute inset-0 bg-black/50 z-10" />
         <Image
-          src="https://images.unsplash.com/photo-1542367554-b6389422584d?q=80&w=1920&h=1080&auto=format&fit=crop"
-          alt="Cityscape background"
+          src="https://images.unsplash.com/photo-1516432391027-6c384b8a4f15?q=80&w=1920&h=1080&auto=format&fit=crop"
+          alt="Vibrant cityscape at night with traffic"
           fill
           style={{ objectFit: 'cover' }}
           className="absolute inset-0 z-0"
-          data-ai-hint="city traffic"
+          data-ai-hint="city traffic night cinematic"
           sizes="100vw"
           priority
         />
