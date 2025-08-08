@@ -45,7 +45,7 @@ export default function RegisterPage() {
                         errorMessage = 'The password is too weak. Please choose a stronger password.';
                         break;
                     default:
-                        errorMessage = 'Registration failed. Please try again later.';
+                        errorMessage = `Registration failed: ${err.message}`;
                         break;
                 }
             }

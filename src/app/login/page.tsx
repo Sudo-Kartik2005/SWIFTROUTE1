@@ -36,7 +36,7 @@ export default function LoginPage() {
                         errorMessage = 'Invalid email or password. Please try again.';
                         break;
                     default:
-                        errorMessage = 'Login failed. Please try again later.';
+                        errorMessage = `Login failed: ${err.message}`;
                         break;
                 }
             }
