@@ -4,6 +4,7 @@ import { Header } from '@/components/header';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/use-auth';
 import { Inter } from 'next/font/google';
+import { Footer } from '@/components/footer';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -22,7 +23,10 @@ export default function RootLayout({
       <body className="font-sans antialiased min-h-screen bg-background flex flex-col">
         <AuthProvider>
           <Header />
-          {children}
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
           <Toaster />
         </AuthProvider>
       </body>
