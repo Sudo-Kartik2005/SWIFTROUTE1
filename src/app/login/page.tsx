@@ -8,15 +8,31 @@ import { Label } from "@/components/ui/label";
 import { LogIn } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { signIn } from "@/lib/auth";
+import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
     const router = useRouter();
+    const { toast } = useToast();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState<string | null>(null);
 
-    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // In a real application, you would handle authentication logic here.
-        // For this prototype, we'll just redirect to the profile page.
-        router.push('/profile');
+        setError(null);
+        try {
+            await signIn(email, password);
+            router.push('/profile');
+        } catch (err: any) {
+            setError(err.message);
+            toast({
+                variant: 'destructive',
+                title: 'Login Failed',
+                description: err.message,
+            });
+        }
     };
 
     return (
@@ -31,11 +47,11 @@ export default function LoginPage() {
                     <form className="space-y-4" onSubmit={handleLogin}>
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
-                            <Input id="email" type="email" placeholder="m@example.com" required />
+                            <Input id="email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="password">Password</Label>
-                            <Input id="password" type="password" required />
+                            <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
                         <Button type="submit" className="w-full">
                             Login

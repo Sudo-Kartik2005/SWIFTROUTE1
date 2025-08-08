@@ -8,15 +8,36 @@ import { Label } from "@/components/ui/label";
 import { UserPlus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { signUp } from "@/lib/auth";
+import { useToast } from "@/hooks/use-toast";
 
 export default function RegisterPage() {
     const router = useRouter();
+    const { toast } = useToast();
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState<string | null>(null);
 
-    const handleRegister = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // In a real application, you would handle registration logic here.
-        // For this prototype, we'll just redirect to the login page.
-        router.push('/login');
+        setError(null);
+        try {
+            await signUp(email, password);
+            toast({
+                title: 'Success!',
+                description: 'Your account has been created.',
+            });
+            router.push('/login');
+        } catch (err: any) {
+            setError(err.message);
+            toast({
+                variant: 'destructive',
+                title: 'Registration Failed',
+                description: err.message,
+            });
+        }
     };
 
     return (
@@ -31,15 +52,15 @@ export default function RegisterPage() {
                     <form className="space-y-4" onSubmit={handleRegister}>
                         <div className="space-y-2">
                             <Label htmlFor="name">Name</Label>
-                            <Input id="name" required />
+                            <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
-                            <Input id="email" type="email" placeholder="m@example.com" required />
+                            <Input id="email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="password">Password</Label>
-                            <Input id="password" type="password" required />
+                            <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
                         <Button type="submit" className="w-full">
                             Create Account
