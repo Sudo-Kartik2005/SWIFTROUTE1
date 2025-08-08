@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,23 +13,23 @@ const tripHistory = [
   {
     id: 1,
     date: "2024-07-20",
-    pickup: "123 Main St, Anytown, USA",
-    dropoff: "456 Oak Ave, Sometown, USA",
-    fare: 1850.50,
+    pickup: "Koramangala, Bengaluru, Karnataka",
+    dropoff: "Indiranagar, Bengaluru, Karnataka",
+    fare: 250.50,
   },
   {
     id: 2,
     date: "2024-07-18",
-    pickup: "789 Pine Ln, Yourtown, USA",
-    dropoff: "101 Maple Dr, Mytown, USA",
-    fare: 1250.75,
+    pickup: "Connaught Place, New Delhi, Delhi",
+    dropoff: "Hauz Khas Village, New Delhi, Delhi",
+    fare: 320.75,
   },
   {
     id: 3,
     date: "2024-07-15",
-    pickup: "212 Elm St, Heretown, USA",
-    dropoff: "333 Birch Rd, Theirtown, USA",
-    fare: 2500.00,
+    pickup: "Bandra West, Mumbai, Maharashtra",
+    dropoff: "Juhu, Mumbai, Maharashtra",
+    fare: 180.00,
   },
 ];
 
