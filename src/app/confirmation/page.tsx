@@ -18,9 +18,10 @@ function ConfirmationContent() {
   const fare = searchParams.get('fare') || '0';
   const vehicleType = searchParams.get('vehicleType') || 'Economy';
   const [tripId, setTripId] = useState<string | null>(null);
+  const [tripSaved, setTripSaved] = useState(false);
 
   useEffect(() => {
-    if (pickup !== 'N/A' && dropoff !== 'N/A') {
+    if (pickup !== 'N/A' && dropoff !== 'N/A' && !tripSaved) {
       const id = crypto.randomUUID();
       setTripId(id);
       const newTrip = {
@@ -37,8 +38,9 @@ function ConfirmationContent() {
       localStorage.setItem('tripHistory', JSON.stringify(updatedTrips));
       // Store trip details by ID for sharing
       localStorage.setItem(`trip_${id}`, JSON.stringify(newTrip));
+      setTripSaved(true);
     }
-  }, [pickup, dropoff, fare, vehicleType]);
+  }, [pickup, dropoff, fare, vehicleType, tripSaved]);
 
   const handleShare = () => {
     if (tripId) {
