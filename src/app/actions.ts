@@ -9,6 +9,7 @@ const FormSchema = z.object({
   pickupLocation: z.string().min(1, 'Pickup location is required.'),
   dropoffLocation: z.string().min(1, 'Dropoff location is required.'),
   vehicleType: z.string().min(1, 'Vehicle type is required.'),
+  isConfirmation: z.string().optional(),
 });
 
 export type FareEstimateState = {
@@ -18,6 +19,7 @@ export type FareEstimateState = {
   vehicleType?: string;
   error?: string;
   success: boolean;
+  isConfirmation?: boolean;
 };
 
 export async function handleEstimateFare(
@@ -28,6 +30,7 @@ export async function handleEstimateFare(
     pickupLocation: formData.get('pickupLocation'),
     dropoffLocation: formData.get('dropoffLocation'),
     vehicleType: formData.get('vehicleType'),
+    isConfirmation: formData.get('isConfirmation'),
   });
 
   if (!validatedFields.success) {
@@ -37,7 +40,17 @@ export async function handleEstimateFare(
     };
   }
 
-  const { pickupLocation, dropoffLocation, vehicleType } = validatedFields.data;
+  const { pickupLocation, dropoffLocation, vehicleType, isConfirmation } = validatedFields.data;
+
+  // If this is a confirmation, we already have the fare.
+  // We just need to pass the data along to the confirmation page.
+  if (isConfirmation === 'true') {
+    return {
+        ...prevState,
+        isConfirmation: true,
+    }
+  }
+
 
   try {
     const result = await estimateFare({ pickupLocation, dropoffLocation, vehicleType });
@@ -47,6 +60,7 @@ export async function handleEstimateFare(
       dropoffLocation,
       vehicleType,
       success: true,
+      isConfirmation: false,
     };
   } catch (e) {
     return {

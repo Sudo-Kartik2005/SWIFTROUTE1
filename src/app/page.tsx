@@ -65,7 +65,7 @@ export default function Home() {
         <div className="relative z-20 w-full max-w-4xl px-4 text-center text-white">
             <h1 className="text-4xl md:text-6xl font-bold mb-4">Get a ride in minutes</h1>
             <p className="text-lg md:text-xl mb-8">The best way to get wherever you're going.</p>
-            <div className="w-full max-w-lg mx-auto">
+            <div className="w-full max-w-2xl mx-auto">
                  <RideRequestForm />
             </div>
         </div>
