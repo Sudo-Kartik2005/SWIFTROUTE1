@@ -2,6 +2,7 @@
 'use server';
 
 import { estimateFare } from '@/ai/flows/estimate-fare';
+import { getAddressFromCoords } from '@/ai/flows/get-address-from-coords';
 import { z } from 'zod';
 
 const FormSchema = z.object({
@@ -49,4 +50,14 @@ export async function handleEstimateFare(
       success: false,
     };
   }
+}
+
+export async function fetchAddressFromCoords(latitude: number, longitude: number): Promise<{ address?: string; error?: string }> {
+    try {
+        const result = await getAddressFromCoords({ latitude, longitude });
+        return { address: result.address };
+    } catch (e) {
+        console.error(e);
+        return { error: 'Failed to fetch address from coordinates.' };
+    }
 }

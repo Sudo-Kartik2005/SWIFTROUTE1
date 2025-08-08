@@ -1,7 +1,7 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
+import { initializeApp, getApps, getApp, FirebaseOptions } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
-const firebaseConfig = {
+const firebaseConfig: FirebaseOptions = {
   projectId: "swiftroute-uygrs",
   appId: "1:369745827855:web:e72cf54938daab85142b7a",
   storageBucket: "swiftroute-uygrs.firebasestorage.app",

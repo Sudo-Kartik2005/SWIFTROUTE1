@@ -1,15 +1,14 @@
 
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect, useState, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { MapPin, DollarSign, ArrowRight, Loader2 } from 'lucide-react';
+import { MapPin, DollarSign, Loader2, LocateFixed } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
-import { handleEstimateFare, type FareEstimateState } from '@/app/actions';
+import { handleEstimateFare, fetchAddressFromCoords, type FareEstimateState } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 
 const initialState: FareEstimateState = {
@@ -29,6 +28,8 @@ export function RideRequestForm() {
   const [state, formAction] = useActionState(handleEstimateFare, initialState);
   const { toast } = useToast();
   const router = useRouter();
+  const [isLocating, setIsLocating] = useState(false);
+  const pickupInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!state.success && state.error) {
@@ -51,6 +52,43 @@ export function RideRequestForm() {
     }
   }
 
+  const handleGetCurrentLocation = () => {
+    setIsLocating(true);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          const result = await fetchAddressFromCoords(latitude, longitude);
+          if (result.address && pickupInputRef.current) {
+            pickupInputRef.current.value = result.address;
+          } else if (result.error) {
+            toast({
+              variant: 'destructive',
+              title: 'Error',
+              description: result.error,
+            });
+          }
+          setIsLocating(false);
+        },
+        (error) => {
+          toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: "Could not get your location. Please ensure you have granted location permissions.",
+          });
+          setIsLocating(false);
+        }
+      );
+    } else {
+      toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: "Geolocation is not supported by your browser.",
+          });
+      setIsLocating(false);
+    }
+  };
+
   return (
     <div className="w-full max-w-md mx-auto">
       <Card className="shadow-2xl bg-card/90 backdrop-blur-sm">
@@ -65,9 +103,21 @@ export function RideRequestForm() {
               <Input
                 name="pickupLocation"
                 placeholder="Enter pick-up location"
-                className="pl-10"
+                className="pl-10 pr-10"
                 required
+                ref={pickupInputRef}
               />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                onClick={handleGetCurrentLocation}
+                disabled={isLocating}
+                aria-label="Use Current Location"
+              >
+                {isLocating ? <Loader2 className="animate-spin h-5 w-5" /> : <LocateFixed className="h-5 w-5" />}
+              </Button>
             </div>
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
