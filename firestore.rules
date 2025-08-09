@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      // Allow users to read, update, and delete their own document
+      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+      // Allow any authenticated user to create a user document (for sign-up)
+      allow create: if request.auth != null;
+    }
+  }
+}
