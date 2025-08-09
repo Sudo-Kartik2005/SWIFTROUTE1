@@ -3,7 +3,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, Loader2, MapPin, PackageOpen, Car } from "lucide-react";
+import { Calendar, Loader2, MapPin, PackageOpen, Car, DollarSign } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
@@ -31,11 +31,14 @@ export default function ProfilePage() {
   }, [user, loading, router]);
 
   useEffect(() => {
-      const storedTrips = localStorage.getItem('tripHistory');
+    if (user) {
+      const storageKey = `tripHistory_${user.uid}`;
+      const storedTrips = localStorage.getItem(storageKey);
       if (storedTrips) {
           setTripHistory(JSON.parse(storedTrips).reverse());
       }
-  }, []);
+    }
+  }, [user]);
 
   if (loading || !user) {
     return (

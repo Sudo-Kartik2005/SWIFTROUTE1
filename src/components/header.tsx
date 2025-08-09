@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -22,6 +23,7 @@ export function Header() {
 
   const handleSignOut = async () => {
     await signOut();
+    localStorage.removeItem('tripHistory_guest');
     router.push('/');
   };
   

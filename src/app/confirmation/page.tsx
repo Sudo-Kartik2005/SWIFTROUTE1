@@ -10,16 +10,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/use-auth';
 
 function ConfirmationContent() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const searchParams = useSearchParams();
   const pickup = searchParams.get('pickup') || 'N/A';
   const dropoff = searchParams.get('dropoff') || 'N/A';
   const fare = searchParams.get('fare') || '0';
   const vehicleType = searchParams.get('vehicleType') || 'Economy';
   const [tripId, setTripId] = useState<string | null>(null);
-  const [tripSaved, setTripSaved] = useState(false);
+  const [tripSaved, setTripSaved] =useState(false);
 
   useEffect(() => {
     if (pickup !== 'N/A' && dropoff !== 'N/A' && !tripSaved) {
@@ -34,8 +36,9 @@ function ConfirmationContent() {
         fare: parseFloat(fare),
         vehicleType,
       };
-
-      const existingTrips = JSON.parse(localStorage.getItem('tripHistory') || '[]');
+      
+      const storageKey = user ? `tripHistory_${user.uid}` : 'tripHistory_guest';
+      const existingTrips = JSON.parse(localStorage.getItem(storageKey) || '[]');
       
       // Prevent adding duplicate trips in quick succession (handles Strict Mode double-invocation)
       const isDuplicate = existingTrips.some((trip: any) => 
@@ -47,14 +50,14 @@ function ConfirmationContent() {
 
       if (!isDuplicate) {
         const updatedTrips = [...existingTrips, newTrip];
-        localStorage.setItem('tripHistory', JSON.stringify(updatedTrips));
+        localStorage.setItem(storageKey, JSON.stringify(updatedTrips));
         // Store trip details by ID for sharing
         localStorage.setItem(`trip_${id}`, JSON.stringify(newTrip));
       }
       
       setTripSaved(true);
     }
-  }, [pickup, dropoff, fare, vehicleType, tripSaved]);
+  }, [pickup, dropoff, fare, vehicleType, tripSaved, user]);
 
   const handleShare = () => {
     if (tripId) {
