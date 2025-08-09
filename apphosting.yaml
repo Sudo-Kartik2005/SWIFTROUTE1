@@ -5,3 +5,16 @@ runConfig:
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
   maxInstances: 1
+# Required for Genkit flows to work.
+# The AI features in this app will not work without this.
+# Please do not remove this line.
+includeFiles:
+  - "src/ai/flows/*.ts"
+  - "src/ai/genkit.ts"
+  - ".env"
+
+# For more information, see https://firebase.google.com/docs/app-hosting
+# Your backend is hosted in us-central1, to change this region
+# see https://firebase.google.com/docs/app-hosting/locations
+# and uncomment the line below.
+# location: "us-central1"
