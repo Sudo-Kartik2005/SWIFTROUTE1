@@ -4,6 +4,8 @@
 import { estimateFare } from '@/ai/flows/estimate-fare';
 import { getAddressFromCoords } from '@/ai/flows/get-address-from-coords';
 import { z } from 'zod';
+import { auth, db } from '@/lib/firebase';
+import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, where } from 'firebase/firestore';
 
 const FormSchema = z.object({
   pickupLocation: z.string().min(1, 'Pickup location is required.'),
@@ -77,5 +79,53 @@ export async function fetchAddressFromCoords(latitude: number, longitude: number
     } catch (e) {
         console.error(e);
         return { error: 'Failed to fetch address from coordinates.' };
+    }
+}
+
+interface TripData {
+  pickup: string;
+  dropoff: string;
+  fare: number;
+  vehicleType: string;
+}
+
+export async function saveTrip(tripData: TripData) {
+    const user = auth.currentUser;
+    if (!user) {
+        return { error: 'User not authenticated' };
+    }
+
+    try {
+        await addDoc(collection(db, 'users', user.uid, 'trips'), {
+            ...tripData,
+            createdAt: serverTimestamp(),
+        });
+        return { success: true };
+    } catch (error) {
+        console.error("Error saving trip to Firestore:", error);
+        return { error: 'Failed to save trip.' };
+    }
+}
+
+export async function getTrips(): Promise<{ trips?: any[]; error?: string }> {
+    const user = auth.currentUser;
+    if (!user) {
+        return { error: 'User not authenticated' };
+    }
+
+    try {
+        const tripsRef = collection(db, 'users', user.uid, 'trips');
+        const q = query(tripsRef, orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const trips = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+            // Convert timestamp to a serializable format
+            date: doc.data().createdAt.toDate().toISOString(),
+        }));
+        return { trips };
+    } catch (error) {
+        console.error("Error fetching trips from Firestore:", error);
+        return { error: 'Failed to fetch trip history.' };
     }
 }

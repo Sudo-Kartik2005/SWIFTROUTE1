@@ -11,6 +11,8 @@ import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/use-auth';
+import { saveTrip } from '@/app/actions';
+
 
 function ConfirmationContent() {
   const { toast } = useToast();
@@ -30,30 +32,33 @@ function ConfirmationContent() {
       
       const newTrip = {
         id: id,
-        date: new Date().toISOString(),
         pickup,
         dropoff,
         fare: parseFloat(fare),
         vehicleType,
       };
-      
-      const storageKey = user ? `tripHistory_${user.uid}` : 'tripHistory_guest';
-      const existingTrips = JSON.parse(localStorage.getItem(storageKey) || '[]');
-      
-      // Prevent adding duplicate trips in quick succession (handles Strict Mode double-invocation)
-      const isDuplicate = existingTrips.some((trip: any) => 
-        trip.pickup === newTrip.pickup &&
-        trip.dropoff === newTrip.dropoff &&
-        trip.fare === newTrip.fare &&
-        Math.abs(new Date(trip.date).getTime() - new Date(newTrip.date).getTime()) < 2000
-      );
 
-      if (!isDuplicate) {
-        const updatedTrips = [...existingTrips, newTrip];
-        localStorage.setItem(storageKey, JSON.stringify(updatedTrips));
-        // Store trip details by ID for sharing
-        localStorage.setItem(`trip_${id}`, JSON.stringify(newTrip));
+      if (user) {
+        // Logged-in user: save to Firestore
+        saveTrip({ pickup, dropoff, fare: parseFloat(fare), vehicleType });
+      } else {
+        // Guest user: save to localStorage
+        const storageKey = 'tripHistory_guest';
+        const existingTrips = JSON.parse(localStorage.getItem(storageKey) || '[]');
+         const isDuplicate = existingTrips.some((trip: any) => 
+            trip.pickup === newTrip.pickup &&
+            trip.dropoff === newTrip.dropoff &&
+            trip.fare === newTrip.fare
+          );
+
+        if (!isDuplicate) {
+             const updatedTrips = [...existingTrips, { ...newTrip, date: new Date().toISOString()}];
+             localStorage.setItem(storageKey, JSON.stringify(updatedTrips));
+        }
       }
+      
+      // Store trip details by ID for sharing
+      localStorage.setItem(`trip_${id}`, JSON.stringify({ ...newTrip, date: new Date().toISOString()}));
       
       setTripSaved(true);
     }

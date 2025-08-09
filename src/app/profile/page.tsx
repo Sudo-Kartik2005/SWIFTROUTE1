@@ -3,12 +3,13 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, Loader2, MapPin, PackageOpen, Car, DollarSign } from "lucide-react";
+import { Calendar, Loader2, MapPin, PackageOpen, Car } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import { getTrips } from "@/app/actions";
+import { useToast } from "@/hooks/use-toast";
 
 interface Trip {
     id: string;
@@ -20,27 +21,44 @@ interface Trip {
 }
 
 export default function ProfilePage() {
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+  const { toast } = useToast();
   const [tripHistory, setTripHistory] = useState<Trip[]>([]);
+  const [loadingTrips, setLoadingTrips] = useState(true);
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!authLoading && !user) {
       router.push('/login');
     }
-  }, [user, loading, router]);
+  }, [user, authLoading, router]);
 
   useEffect(() => {
     if (user) {
-      const storageKey = `tripHistory_${user.uid}`;
-      const storedTrips = localStorage.getItem(storageKey);
+      setLoadingTrips(true);
+      getTrips().then(result => {
+        if (result.trips) {
+          setTripHistory(result.trips as Trip[]);
+        } else if (result.error) {
+          toast({
+            variant: "destructive",
+            title: "Error fetching trips",
+            description: result.error,
+          });
+        }
+        setLoadingTrips(false);
+      });
+    } else if (!authLoading) {
+      // Handle guest users if needed, or just show empty history
+      const storedTrips = localStorage.getItem('tripHistory_guest');
       if (storedTrips) {
           setTripHistory(JSON.parse(storedTrips).reverse());
       }
+      setLoadingTrips(false);
     }
-  }, [user]);
+  }, [user, authLoading, toast]);
 
-  if (loading || !user) {
+  if (authLoading || !user) {
     return (
       <div className="flex-1 flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -67,7 +85,11 @@ export default function ProfilePage() {
         <h2 className="text-2xl font-bold mb-6">Trip History</h2>
         
         <div className="space-y-4">
-          {tripHistory.length > 0 ? (
+          {loadingTrips ? (
+             <div className="flex items-center justify-center p-12">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+             </div>
+          ) : tripHistory.length > 0 ? (
             tripHistory.map((trip, index) => (
               <Card key={`${trip.id}-${index}`} className="shadow-lg transition-all hover:shadow-xl hover:border-accent border-2 border-transparent bg-card/80 backdrop-blur-sm">
                 <CardContent className="p-6">
