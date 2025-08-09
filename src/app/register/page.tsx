@@ -25,8 +25,13 @@ export default function RegisterPage() {
     const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setError(null);
+        if (!name) {
+            setError("Name is required.");
+            return;
+        }
+
         try {
-            await signUp(email, password);
+            await signUp(name, email, password);
             toast({
                 title: 'Success!',
                 description: 'Your account has been created. Please log in.',
