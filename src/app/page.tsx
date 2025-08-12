@@ -1,4 +1,6 @@
 
+'use client';
+
 import { RideRequestForm } from '@/components/ride-request-form';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
