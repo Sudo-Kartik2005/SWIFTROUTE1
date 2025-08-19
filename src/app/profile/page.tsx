@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, query, orderBy, getDocs } from "firebase/firestore";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 
 interface Trip {
@@ -30,15 +32,9 @@ export default function ProfilePage() {
   const [loadingTrips, setLoadingTrips] = useState(true);
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      router.push('/login');
-    }
-  }, [user, authLoading, router]);
-
-  useEffect(() => {
     const fetchTrips = async () => {
         if (user) {
-            setLoadingTrips(true);
+            // User is logged in, fetch from Firestore
             try {
                 const tripsRef = collection(db, 'users', user.uid, 'trips');
                 const q = query(tripsRef, orderBy('createdAt', 'desc'));
@@ -54,29 +50,26 @@ export default function ProfilePage() {
                 toast({
                     variant: "destructive",
                     title: "Error fetching trips",
-                    description: "Failed to fetch trip history.",
+                    description: "Failed to fetch your trip history.",
                 });
-            } finally {
-                setLoadingTrips(false);
+            }
+        } else {
+            // User is a guest, fetch from localStorage
+            const storedTrips = localStorage.getItem('tripHistory_guest');
+            if (storedTrips) {
+                setTripHistory(JSON.parse(storedTrips).reverse());
             }
         }
+        setLoadingTrips(false);
     };
     
+    // Only fetch trips once the auth state is confirmed
     if (!authLoading) {
-      if (user) {
         fetchTrips();
-      } else {
-         // Handle guest users
-        const storedTrips = localStorage.getItem('tripHistory_guest');
-        if (storedTrips) {
-            setTripHistory(JSON.parse(storedTrips).reverse());
-        }
-        setLoadingTrips(false);
-      }
     }
   }, [user, authLoading, toast]);
 
-  if (authLoading || (!user && !tripHistory.length)) {
+  if (authLoading) {
     return (
       <div className="flex-1 flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -84,28 +77,20 @@ export default function ProfilePage() {
     );
   }
 
-  // Handle case where user is not logged in but might have guest history
-  if (!user) {
-      router.push('/login');
-      return (
-        <div className="flex-1 flex items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      );
-  }
-
-  const displayName = user.displayName || user.email;
+  const displayName = user ? (user.displayName || user.email) : 'Guest';
 
   return (
     <div className="flex-1 w-full bg-secondary">
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="flex flex-col md:flex-row items-center gap-6 mb-12">
-          <Avatar className="h-24 w-24 border-4 border-background shadow-lg">
-            <AvatarImage src={user.photoURL || "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&h=100&auto=format&fit=crop"} alt="User avatar" data-ai-hint="person smiling" />
-            <AvatarFallback>{displayName?.[0].toUpperCase()}</AvatarFallback>
-          </Avatar>
+          {user && (
+            <Avatar className="h-24 w-24 border-4 border-background shadow-lg">
+                <AvatarImage src={user.photoURL || "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&h=100&auto=format&fit=crop"} alt="User avatar" data-ai-hint="person smiling" />
+                <AvatarFallback>{displayName?.[0].toUpperCase()}</AvatarFallback>
+            </Avatar>
+          )}
           <div>
-            <h1 className="text-3xl font-bold">Welcome Back, {displayName}!</h1>
+            <h1 className="text-3xl font-bold">Welcome, {displayName}!</h1>
             <p className="text-muted-foreground">Here's a look at your recent trips with SwiftRoute.</p>
           </div>
         </div>
@@ -155,7 +140,12 @@ export default function ProfilePage() {
                 <CardContent className="p-12 flex flex-col items-center justify-center text-center">
                     <PackageOpen className="h-16 w-16 text-muted-foreground mb-4" />
                     <h3 className="text-xl font-semibold">No Trips Yet</h3>
-                    <p className="text-muted-foreground mt-1">Your past rides will appear here.</p>
+                    <p className="text-muted-foreground mt-1">{user ? "Your past rides will appear here." : "Your guest ride history is empty."}</p>
+                    {!user && (
+                         <Button asChild className="mt-4">
+                            <Link href="/login">Login to see your history</Link>
+                        </Button>
+                    )}
                 </CardContent>
             </Card>
           )}

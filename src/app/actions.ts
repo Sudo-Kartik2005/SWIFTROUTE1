@@ -5,7 +5,7 @@ import { estimateFare } from '@/ai/flows/estimate-fare';
 import { getAddressFromCoords } from '@/ai/flows/get-address-from-coords';
 import { z } from 'zod';
 import { auth, db } from '@/lib/firebase';
-import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, where } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const FormSchema = z.object({
   pickupLocation: z.string().min(1, 'Pickup location is required.'),
@@ -92,7 +92,8 @@ interface TripData {
 export async function saveTrip(tripData: TripData) {
     const user = auth.currentUser;
     if (!user) {
-        return { error: 'User not authenticated' };
+        // This should not happen if called correctly from the client, but it's a good safeguard.
+        return { error: 'User not authenticated. Cannot save trip to database.' };
     }
 
     try {
