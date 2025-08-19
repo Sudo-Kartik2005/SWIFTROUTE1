@@ -110,6 +110,8 @@ export function RideRequestForm() {
                 className="pl-10 pr-10 h-12 text-base"
                 required
                 ref={pickupInputRef}
+                defaultValue={state.pickupLocation}
+                key={`pickup-${state.pickupLocation}`}
                 />
                 <Button
                 type="button"
@@ -132,12 +134,14 @@ export function RideRequestForm() {
                 placeholder="Enter drop-off location"
                 className="pl-10 h-12 text-base"
                 required
+                defaultValue={state.dropoffLocation}
+                key={`dropoff-${state.dropoffLocation}`}
                 />
             </div>
           </div>
           
           <div>
-            <RadioGroup name="vehicleType" defaultValue="Economy" className="grid grid-cols-3 gap-4">
+            <RadioGroup name="vehicleType" defaultValue={state.vehicleType || "Economy"} className="grid grid-cols-3 gap-4">
               {['Economy', 'Premium', 'SUV'].map((type) => (
                 <Label key={type} htmlFor={type} className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer">
                   <RadioGroupItem value={type} id={type} className="sr-only" />

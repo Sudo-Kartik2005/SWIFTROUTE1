@@ -54,6 +54,8 @@ function ConfirmationContent() {
         if (!isDuplicate) {
              const updatedTrips = [...existingTrips, { ...newTrip, date: new Date().toISOString()}];
              localStorage.setItem(storageKey, JSON.stringify(updatedTrips));
+             // Dispatch a storage event to notify other tabs/components
+             window.dispatchEvent(new Event('storage'));
         }
       }
       

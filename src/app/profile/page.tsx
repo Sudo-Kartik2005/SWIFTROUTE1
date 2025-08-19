@@ -7,7 +7,7 @@ import { Calendar, Loader2, MapPin, PackageOpen, Car } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, query, orderBy, getDocs } from "firebase/firestore";
@@ -31,43 +31,59 @@ export default function ProfilePage() {
   const [tripHistory, setTripHistory] = useState<Trip[]>([]);
   const [loadingTrips, setLoadingTrips] = useState(true);
 
-  useEffect(() => {
-    const fetchTrips = async () => {
-        if (user) {
-            // User is logged in, fetch from Firestore
-            try {
-                const tripsRef = collection(db, 'users', user.uid, 'trips');
-                const q = query(tripsRef, orderBy('createdAt', 'desc'));
-                const querySnapshot = await getDocs(q);
-                const trips = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data(),
-                    date: doc.data().createdAt.toDate().toISOString(),
-                })) as Trip[];
-                setTripHistory(trips);
-            } catch (error) {
-                console.error("Error fetching trips from Firestore:", error);
-                toast({
-                    variant: "destructive",
-                    title: "Error fetching trips",
-                    description: "Failed to fetch your trip history.",
-                });
-            }
-        } else {
-            // User is a guest, fetch from localStorage
-            const storedTrips = localStorage.getItem('tripHistory_guest');
-            if (storedTrips) {
-                setTripHistory(JSON.parse(storedTrips).reverse());
-            }
+  const fetchTrips = useCallback(async () => {
+    setLoadingTrips(true);
+    if (user) {
+        // User is logged in, fetch from Firestore
+        try {
+            const tripsRef = collection(db, 'users', user.uid, 'trips');
+            const q = query(tripsRef, orderBy('createdAt', 'desc'));
+            const querySnapshot = await getDocs(q);
+            const trips = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+                date: doc.data().createdAt.toDate().toISOString(),
+            })) as Trip[];
+            setTripHistory(trips);
+        } catch (error) {
+            console.error("Error fetching trips from Firestore:", error);
+            toast({
+                variant: "destructive",
+                title: "Error fetching trips",
+                description: "Failed to fetch your trip history.",
+            });
         }
-        setLoadingTrips(false);
-    };
-    
+    } else {
+        // User is a guest, fetch from localStorage
+        const storedTrips = localStorage.getItem('tripHistory_guest');
+        if (storedTrips) {
+            setTripHistory(JSON.parse(storedTrips).reverse());
+        }
+    }
+    setLoadingTrips(false);
+  }, [user, toast]);
+
+  useEffect(() => {
     // Only fetch trips once the auth state is confirmed
     if (!authLoading) {
         fetchTrips();
     }
-  }, [user, authLoading, toast]);
+  }, [authLoading, fetchTrips]);
+
+  // Listen for storage changes to update guest history
+  useEffect(() => {
+    const handleStorageChange = () => {
+        if (!user) { // Only refetch for guests
+            fetchTrips();
+        }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+        window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [user, fetchTrips]);
+
 
   if (authLoading) {
     return (
@@ -122,7 +138,7 @@ export default function ProfilePage() {
                       </div>
                     </div>
                     <Separator orientation="vertical" className="hidden sm:block h-20 mx-4" />
-                    <div className="flex flex-col items-end gap-2 w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-none">
+                    <div className="flex flex-col items-end gap-2 w-full sm:w-auto pt-4 sm:border-none">
                         <div className="flex items-center gap-2 text-lg font-bold text-primary">
                             <span>₹{trip.fare.toFixed(2)}</span>
                         </div>
