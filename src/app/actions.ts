@@ -106,26 +106,3 @@ export async function saveTrip(tripData: TripData) {
         return { error: 'Failed to save trip.' };
     }
 }
-
-export async function getTrips(): Promise<{ trips?: any[]; error?: string }> {
-    const user = auth.currentUser;
-    if (!user) {
-        return { error: 'User not authenticated' };
-    }
-
-    try {
-        const tripsRef = collection(db, 'users', user.uid, 'trips');
-        const q = query(tripsRef, orderBy('createdAt', 'desc'));
-        const querySnapshot = await getDocs(q);
-        const trips = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-            // Convert timestamp to a serializable format
-            date: doc.data().createdAt.toDate().toISOString(),
-        }));
-        return { trips };
-    } catch (error) {
-        console.error("Error fetching trips from Firestore:", error);
-        return { error: 'Failed to fetch trip history.' };
-    }
-}

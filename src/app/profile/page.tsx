@@ -8,8 +8,10 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getTrips } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
+import { db } from "@/lib/firebase";
+import { collection, query, orderBy, getDocs } from "firebase/firestore";
+
 
 interface Trip {
     id: string;
@@ -34,36 +36,62 @@ export default function ProfilePage() {
   }, [user, authLoading, router]);
 
   useEffect(() => {
-    if (user && !authLoading) {
-      setLoadingTrips(true);
-      getTrips().then(result => {
-        if (result.trips) {
-          setTripHistory(result.trips as Trip[]);
-        } else if (result.error) {
-          toast({
-            variant: "destructive",
-            title: "Error fetching trips",
-            description: result.error,
-          });
+    const fetchTrips = async () => {
+        if (user) {
+            setLoadingTrips(true);
+            try {
+                const tripsRef = collection(db, 'users', user.uid, 'trips');
+                const q = query(tripsRef, orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(q);
+                const trips = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    date: doc.data().createdAt.toDate().toISOString(),
+                })) as Trip[];
+                setTripHistory(trips);
+            } catch (error) {
+                console.error("Error fetching trips from Firestore:", error);
+                toast({
+                    variant: "destructive",
+                    title: "Error fetching trips",
+                    description: "Failed to fetch trip history.",
+                });
+            } finally {
+                setLoadingTrips(false);
+            }
+        }
+    };
+    
+    if (!authLoading) {
+      if (user) {
+        fetchTrips();
+      } else {
+         // Handle guest users
+        const storedTrips = localStorage.getItem('tripHistory_guest');
+        if (storedTrips) {
+            setTripHistory(JSON.parse(storedTrips).reverse());
         }
         setLoadingTrips(false);
-      });
-    } else if (!authLoading) {
-      // Handle guest users if needed, or just show empty history
-      const storedTrips = localStorage.getItem('tripHistory_guest');
-      if (storedTrips) {
-          setTripHistory(JSON.parse(storedTrips).reverse());
       }
-      setLoadingTrips(false);
     }
   }, [user, authLoading, toast]);
 
-  if (authLoading || !user) {
+  if (authLoading || (!user && !tripHistory.length)) {
     return (
       <div className="flex-1 flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
+  }
+
+  // Handle case where user is not logged in but might have guest history
+  if (!user) {
+      router.push('/login');
+      return (
+        <div className="flex-1 flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      );
   }
 
   const displayName = user.displayName || user.email;
