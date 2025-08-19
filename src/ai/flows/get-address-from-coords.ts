@@ -32,7 +32,11 @@ const getAddressTool = ai.defineTool(
         }),
     },
     async ({ latitude, longitude }) => {
-        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, {
+            headers: {
+                'User-Agent': 'SwiftRoute Ride-Sharing App'
+            }
+        });
         if (!response.ok) {
             throw new Error(`Failed to fetch address: ${response.statusText}`);
         }
