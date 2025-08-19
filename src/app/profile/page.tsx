@@ -34,7 +34,7 @@ export default function ProfilePage() {
   }, [user, authLoading, router]);
 
   useEffect(() => {
-    if (user) {
+    if (user && !authLoading) {
       setLoadingTrips(true);
       getTrips().then(result => {
         if (result.trips) {
